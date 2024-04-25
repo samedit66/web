@@ -79,6 +79,20 @@ ul li {
     text-decoration: none;
 }
 
+.category-list-element::after {
+    color: #e0e1f3;
+    content: "\276F";
+    flex: 0 0 auto;
+    font: 400 15px/15px Verdana;
+    margin: 0 0 0 auto;
+    text-align: center;
+    transition: inherit;
+}
+
+.category-list-element:hover {
+    background-color: #f5f6fc;
+}
+
 .container-fluid > .row {
     margin-left: 0;
     margin-right: 0;
