@@ -15,20 +15,20 @@
 
     <header>
         <div class="container-fluid gx-0" style="background: #f5f6fc;">
-            <div class="row d-flex flex-wrap py-2 px-3 mb-4">
+            <div class="row d-flex flex-wrap py-2 px-3 mb-2">
                 <div class="col-1 d-flex justify-content-center align-items-center">
                     <a href="#" class="d-inline-flex link-body-emphasis text-decoration-none">
                         <img src="img/logo.svg" height="24" alt="Apteka.ru" loading="lazy" />
                     </a>
                 </div>
-        
+
                 <div class="col-1 d-flex justify-content-center align-items-center">
                     <button type="button" class="btn btn-outline-light border-0" aria-label="Выбор города">
                         <img src="img/city.svg" height="24" alt="City" loading="lazy" />
                         <span style="color: #1c257b;" class="fw-bold">Москва</span>
                     </button>
                 </div>
-        
+
                 <div class="search-bar col-9 d-flex flex-column gap-2">
                     <div class="d-flex align-items-center">
                         <!--
@@ -37,7 +37,8 @@
                         </span>
                     -->
                         <form class="w-100 me-0" role="search">
-                            <input type="search" class="form-control rounded-start-pill" style="box-shadow: none !important;"
+                            <input type="search" class="form-control rounded-start-pill"
+                                style="box-shadow: none !important;"
                                 placeholder="Введите название товара, заболевания или симптома" aria-label="Search">
                         </form>
                         <button type="button" class="rounded-end-pill btn btn-primary" style="background: #4665d7;">
@@ -55,8 +56,8 @@
                                     class="example-hint" data-wtag-click="">северная звезда</a>
                             </li>
                             <li class="ms-2">
-                                <a href="/search/?q=%D0%B0%D0%BF%D0%B8%D0%BA%D1%81%D0%B0%D0%B1%D0%B0%D0%BD" class="example-hint"
-                                    data-wtag-click="">апиксабан</a>
+                                <a href="/search/?q=%D0%B0%D0%BF%D0%B8%D0%BA%D1%81%D0%B0%D0%B1%D0%B0%D0%BD"
+                                    class="example-hint" data-wtag-click="">апиксабан</a>
                             </li>
                             <li class="ms-2">
                                 <a href="/search/?q=%D0%B4%D0%BB%D1%8F+%D0%BB%D0%B5%D1%87%D0%B5%D0%BD%D0%B8%D1%8F+%D0%BC%D0%BE%D0%BB%D0%BE%D1%87%D0%BD%D0%B8%D1%86%D1%8B"
@@ -69,7 +70,7 @@
                         </ul>
                     </div>
                 </div>
-        
+
                 <div class="col-1 d-flex justify-content-center align-items-center">
                     <div class="ButtonIcon">
                         <a class="d-flex flex-column link-underline-light" href="/cart/" aria-label="Корзина">
@@ -83,8 +84,47 @@
     </header>
 
     <main>
-        <div class="container">
+        <div class="container-fluid gx-0">
+            <div class="row">
 
+                <div class="col-2">
+                    <nav>
+                        <div class="nav nav-pills" id="nav-tab" role="tablist">
+                            <button class="nav-link rounded-0 active" id="nav-home-tab" data-bs-toggle="tab"
+                                data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home"
+                                aria-selected="true"
+                            >
+                                <span class="fw-bold">Подобрать</span>
+                            </button>
+
+                            <button class="nav-link rounded-0" id="nav-profile-tab" data-bs-toggle="tab"
+                                data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile"
+                                aria-selected="false"
+                            >
+                                <span class="fw-bold">Товары</span>
+                            </button>
+                        </div>
+                    </nav>
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="nav-home" role="tabpanel"
+                            aria-labelledby="nav-home-tab"
+                        >
+                            ...
+                        </div>
+                        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab"
+                        >
+                            ...
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-9">
+                    Главная > Товары для диабетиков > ГЛЮКОМЕТРЫ > Глюкометр Акку-Чек Актив/набор/
+                </div>
+                <div class="col-1">
+                    4
+                </div>
+            </div>
         </div>
     </main>
 
