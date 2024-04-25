@@ -38,3 +38,22 @@
     background-color: white !important;
     color: #4665d7 !important;
 }
+
+.part-of-path {
+    color: #4665d7;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+    cursor: pointer;
+    outline: 0;
+    text-decoration: none;
+    transition: color .25s ease-in-out;
+    font-size: 14px;
+}
+
+.end-of-path {
+    font-size: 14px;
+    font-style: normal;
+    font-family: Source Sans Pro, sans-serif;
+}
