@@ -97,3 +97,10 @@ ul li {
     margin-left: 0;
     margin-right: 0;
 }
+
+.item-name {
+    color: #4665d7;
+    font-size: 1.5rem;
+    line-height: 1.25;
+    margin: 0;
+}
