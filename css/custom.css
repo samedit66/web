@@ -164,18 +164,22 @@ ul li {
     padding: 0 0 .25rem;
 }
 
-.product-indications-title {
+.main-section-title {
+    color: #4665d7;
+    font-weight: 600;
+}
+
+.section-title {
     color: #1c257b;
     font-size: 1.25rem;
     font-weight: 600;
-    margin: 0;
 }
 
-#show-product-indications {
+.show-content {
     text-decoration: none;
     transition: color .25s ease-in-out;
 }
 
-#show-product-indications:hover {
+.show-content:hover {
     color: black;
 }
