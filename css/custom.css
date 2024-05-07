@@ -1,3 +1,8 @@
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
 .search-hint {
     color: #8d92bd;
     font-size: 0.75rem;
@@ -182,4 +187,12 @@ ul li {
 
 .show-content:hover {
     color: black;
+}
+
+.footer-title {
+    color: #666;
+    font-size: 1rem;
+    font-weight: 400;
+    margin: 0 0 .625rem;
+    text-transform: uppercase;
 }
