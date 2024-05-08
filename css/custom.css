@@ -196,3 +196,8 @@ ul li {
     margin: 0 0 .625rem;
     text-transform: uppercase;
 }
+
+#footer ul li {
+    color: #4665d7;
+    font-size: 14px;
+}
