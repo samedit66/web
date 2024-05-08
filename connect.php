@@ -1,6 +1,7 @@
 <?php
 $host = 'localhost';
 $db = 'pharmacy';
+$user = 'root';
 $password = '';
 $charset = 'utf8';
 

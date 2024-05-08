@@ -54,7 +54,7 @@
                 <tr>
                     <th scope="col">Изображение</th>
                     <th scope="col">Название</th>
-                    <th scope="col">Доступная скидка</th>
+                    <th scope="col">Доступная скидка (%)</th>
                     <th scope="col">Описание</th>
                     <th scope="col">Стоимость</th>
                 </tr>
@@ -62,7 +62,7 @@
             <tbody>
             <?php foreach ($fullList as $item):?>
                 <tr>
-                    <th scope="row"><img src="db_images/<?=$item['img_path']?>" style="max: width 150px;"></th>
+                    <th scope="row"><img src="db_images/<?=$item['img_path']?>" style="max-width: 150px;"></th>
                     <td><?=$item['name']?></td>
                     <td><?=$item['discount']?></td>
                     <td><?=$item['description']?></td>

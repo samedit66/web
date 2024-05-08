@@ -1,7 +1,7 @@
 <?php
 require_once('connect.php');
 
-$sql = "SELECT products.img_path, products.name, discounts.discount AS discount, services.description, services.cost
+$sql = "SELECT products.img_path, products.name, discounts.discount_size AS discount, products.description, products.cost
         FROM products
         INNER JOIN discounts ON products.id_discount = discounts.id";
 
