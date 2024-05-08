@@ -1,52 +1,48 @@
 <?php
 require_once('connect.php');
 
-$sql = "SELECT products.img_path, products.name, discounts.discount_size AS discount, products.description, products.cost
+$query = "SELECT products.img_path, products.name, discounts.discount_size AS discount, products.description, products.cost
         FROM products
         INNER JOIN discounts ON products.id_discount = discounts.id";
 
-$arBind = [];
+$args = [];
 $params = [];
 
-/*
-if (!isset($_GET['clearFilter'])) {
+if (!isset($_GET['clear_filter'])) {
     if (count($_GET) > 0) {
-        if (!empty($_GET['name'])) {
-            $arBind[] = "services.name LIKE :name";
-            $params[':name'] = '%' . $_GET['name'] . '%';
+        if (!empty($_GET['product_name'])) {
+            $args[] = "products.name LIKE :name";
+            $params[':name'] = '%' . $_GET['product_name'] . '%';
         }
         if (!empty($_GET['description'])) {
-            $arBind[] = "services.description LIKE :description";
+            $args[] = "products.description LIKE :description";
             $params[':description'] = '%' . $_GET['description'] . '%';
         }
-        if (!empty($_GET['priceFrom'])) {
-            $arBind[] = "services.cost >= :priceFrom";
-            $params[':priceFrom'] = $_GET['priceFrom'];
+        if (!empty($_GET['price_from'])) {
+            $args[] = "products.cost >= :price_from";
+            $params[':price_from'] = $_GET['price_from'];
         }
-        if (!empty($_GET['priceTo'])) {
-            $arBind[] = "services.cost <= :priceTo";
-            $params[':priceTo'] = $_GET['priceTo'];
+        if (!empty($_GET['price_to'])) {
+            $args[] = "products.cost <= :price_to";
+            $params[':price_to'] = $_GET['price_to'];
         }
-        if (!empty($_GET['id_worker'])) {
-            $arBind[] = "workers.id  LIKE :id_worker";
-            $params[':id_worker'] = '%' . $_GET['id_worker'] . '%';
+        if (!empty($_GET['id_discount'])) {
+            $args[] = "discounts.id LIKE :id_discount";
+            $params[':id_discount'] = '%' . $_GET['id_discount'] . '%';
         }
 
-        if (count($arBind) > 0) {
-            $where = 'WHERE ' . implode(' AND ', $arBind);
-            $sql .= ' ' . $where;
+        if (count($args) > 0) {
+            $where_clause = 'WHERE ' . implode(' AND ', $args);
+            $query .= ' ' . $where_clause;
         }
     }
-}
-else{
+} else {
     // Перенаправить пользователя на страницу без параметров фильтрации
     header('Location: ' . $_SERVER['PHP_SELF']);
     exit;
 }
-*/
 
-$stmt = $pdo->prepare($sql);
-
+$stmt = $pdo->prepare($query);
 foreach ($params as $paramName => $paramValue) {
     if (is_numeric($paramValue)) {
         $stmt->bindValue($paramName, $paramValue, PDO::PARAM_INT);
@@ -54,21 +50,18 @@ foreach ($params as $paramName => $paramValue) {
         $stmt->bindValue($paramName, $paramValue, PDO::PARAM_STR);
     }
 }
-
 $stmt->execute();
 
-$fullList = [];
-
+$products = [];
 while ($row = $stmt->fetch()) {
-    $fullList[] = $row;
+    $products[] = $row;
 }
 
-$selectA = [];
+$discounts = [];
 $query = "SELECT * FROM discounts";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
-
 while ($row = $stmt->fetch()) {
-    $selectA[] = $row;
+    $discounts[] = $row;
 }
 ?>

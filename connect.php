@@ -12,4 +12,5 @@ $options = [
     PDO::ATTR_EMULATE_PREPARES => false
 ];
 
+global $pdo;
 $pdo = new PDO($dsn, $user, $password, $options); // пдо-драйвер для подключения к базе данных
