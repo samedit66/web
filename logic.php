@@ -1,5 +1,5 @@
 <?php
-require_once('connect.php');
+require_once('db.php');
 
 $query = "SELECT products.img_path, products.name, discounts.discount_size AS discount, products.description, products.cost
         FROM products
@@ -42,7 +42,7 @@ if (!isset($_GET['clear_filter'])) {
     exit;
 }
 
-$stmt = $pdo->prepare($query);
+$stmt = Database::prepare($query);
 foreach ($params as $paramName => $paramValue) {
     if (is_numeric($paramValue)) {
         $stmt->bindValue($paramName, $paramValue, PDO::PARAM_INT);
@@ -59,7 +59,7 @@ while ($row = $stmt->fetch()) {
 
 $discounts = [];
 $query = "SELECT * FROM discounts";
-$stmt = $pdo->prepare($query);
+$stmt = Database::prepare($query);
 $stmt->execute();
 while ($row = $stmt->fetch()) {
     $discounts[] = $row;
