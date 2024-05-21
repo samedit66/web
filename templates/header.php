@@ -1,3 +1,8 @@
+<?php
+require_once($_SERVER['DOCUMENT_ROOT'] . '/web/.core/index.php');
+UserActions::sign_out();
+?>
+
 <!doctype html>
 <html lang="ru">
 
@@ -17,7 +22,7 @@
         <div class="container-fluid gx-0 fixed-top" style="background: #f5f6fc;">
             <div class="row d-flex py-2 px-3">
                 <div class="col-1 d-flex justify-content-center align-items-center">
-                    <a href="#" class="d-inline-flex link-body-emphasis text-decoration-none">
+                    <a href="./index.php" class="d-inline-flex link-body-emphasis text-decoration-none">
                         <img src="img/logo.svg" height="24" alt="Apteka.ru" loading="lazy" />
                     </a>
                 </div>
@@ -29,12 +34,10 @@
                     </button>
                 </div>
 
-                <div class="search-bar col-9 d-flex flex-column gap-2">
+                <div class="search-bar col-6 d-flex flex-column gap-2">
                     <div class="d-flex align-items-center">
                         <form class="w-100 me-0" role="search">
-                            <input type="search" class="form-control rounded-start-pill"
-                                style="box-shadow: none !important;"
-                                placeholder="Введите название товара, заболевания или симптома" aria-label="Search">
+                            <input type="search" class="form-control rounded-start-pill" style="box-shadow: none !important;" placeholder="Введите название товара, заболевания или симптома" aria-label="Search">
                         </form>
                         <button type="button" class="rounded-end-pill btn btn-primary" style="background: #4665d7;">
                             <span>Искать</span>
@@ -47,20 +50,16 @@
                                 <a href="/search/?q=bioderma" class="example-hint" data-wtag-click="">bioderma</a>
                             </li>
                             <li class="ms-2">
-                                <a href="/search/?q=%D1%81%D0%B5%D0%B2%D0%B5%D1%80%D0%BD%D0%B0%D1%8F+%D0%B7%D0%B2%D0%B5%D0%B7%D0%B4%D0%B0"
-                                    class="example-hint" data-wtag-click="">северная звезда</a>
+                                <a href="/search/?q=%D1%81%D0%B5%D0%B2%D0%B5%D1%80%D0%BD%D0%B0%D1%8F+%D0%B7%D0%B2%D0%B5%D0%B7%D0%B4%D0%B0" class="example-hint" data-wtag-click="">северная звезда</a>
                             </li>
                             <li class="ms-2">
-                                <a href="/search/?q=%D0%B0%D0%BF%D0%B8%D0%BA%D1%81%D0%B0%D0%B1%D0%B0%D0%BD"
-                                    class="example-hint" data-wtag-click="">апиксабан</a>
+                                <a href="/search/?q=%D0%B0%D0%BF%D0%B8%D0%BA%D1%81%D0%B0%D0%B1%D0%B0%D0%BD" class="example-hint" data-wtag-click="">апиксабан</a>
                             </li>
                             <li class="ms-2">
-                                <a href="/search/?q=%D0%B4%D0%BB%D1%8F+%D0%BB%D0%B5%D1%87%D0%B5%D0%BD%D0%B8%D1%8F+%D0%BC%D0%BE%D0%BB%D0%BE%D1%87%D0%BD%D0%B8%D1%86%D1%8B"
-                                    class="example-hint" data-wtag-click="">для лечения молочницы</a>
+                                <a href="/search/?q=%D0%B4%D0%BB%D1%8F+%D0%BB%D0%B5%D1%87%D0%B5%D0%BD%D0%B8%D1%8F+%D0%BC%D0%BE%D0%BB%D0%BE%D1%87%D0%BD%D0%B8%D1%86%D1%8B" class="example-hint" data-wtag-click="">для лечения молочницы</a>
                             </li>
                             <li class="ms-2">
-                                <a href="/search/?q=%D0%B7%D0%B0%D1%89%D0%B8%D1%82%D0%B0+%D0%BC%D0%BE%D1%87%D0%B5%D0%B2%D0%BE%D0%B3%D0%BE+%D0%BF%D1%83%D0%B7%D1%8B%D1%80%D1%8F"
-                                    class="example-hint" data-wtag-click="">защита мочевого пузыря</a>
+                                <a href="/search/?q=%D0%B7%D0%B0%D1%89%D0%B8%D1%82%D0%B0+%D0%BC%D0%BE%D1%87%D0%B5%D0%B2%D0%BE%D0%B3%D0%BE+%D0%BF%D1%83%D0%B7%D1%8B%D1%80%D1%8F" class="example-hint" data-wtag-click="">защита мочевого пузыря</a>
                             </li>
                         </ul>
                     </div>
@@ -73,6 +72,20 @@
                             <span style="color: #1c257b;">Корзина</span>
                         </a>
                     </div>
+                </div>
+
+                <div class="col-3">
+                    <?php if (null != UserLogic::current()) : ?>
+                        <form method="post">
+                            <?= "Вы вошли как " . UserLogic::current()['email'] . "." ?>
+                            <input class="form-control" type="hidden" name='action' value="signout" />
+                            <button class="btn btn-outline-secondary" type="submit">Выйти</button>
+                        </form>
+                    <?php else : ?>
+                        Вы не авторизованы.
+                        <br>
+                        <a href="./authorization.php">Ввести логин и пароль</a> или <a href="./registration.php">зарегистрироваться.</a>
+                    <?php endif ?>
                 </div>
             </div>
         </div>

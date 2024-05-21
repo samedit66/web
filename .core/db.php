@@ -43,4 +43,3 @@ class Database {
         return intval(static::connection()->lastInsertId());
     }
 }
-?>

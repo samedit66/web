@@ -1,6 +1,13 @@
 <?php
+    require_once($_SERVER['DOCUMENT_ROOT'] . '/web/.core/index.php');
+
+    if (null === UserLogic::current()) {
+        header('Location: authorization.php');
+        die;
+    }
+
     require_once('logic.php');
-    require_once('templates/header.php');
+    require_once($_SERVER['DOCUMENT_ROOT'] . '/web/templates/header.php');
 ?>
 
 <form action="" id="form" method="GET">
