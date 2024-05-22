@@ -50,38 +50,51 @@ function simplify_repeated_styles(string $html) {
     $found_styles = [];
     // Находим все стили и считаем кол-во их повторений
     preg_match_all('/\bstyle\s*=\s*"([\D\d]+?)"/', $html, $matches);
-    foreach ($matches[0] as $style) {
-        if (!isset($found_styles[$style[1]])) {
-            $found_styles[$style[1]] = 0;
+    foreach ($matches[1] as $style) {
+        //var_dump($matches);
+        if (!isset($found_styles[$style])) {
+            $found_styles[$style] = 0;
         }
-        $found_styles[$style[1]] += 1;
+        $found_styles[$style] += 1;
     }
 
     // Создаем классы для каждого из повторяющихся стилей
     $repeated_styles = [];
     foreach ($found_styles as $style => $count) {
         if ($count > 1) {
-            $repeated_styles[$style] = 'style' . uniqid('', true);
+            $repeated_styles[$style] = uniqid('style');
         }
     }
 
     $html = preg_replace_callback(
-        '/<(\w+)(\s+\w+="[\D\d]+?")*\s*>/sui',
+        '/<(\w+)\s+(\w+\s*=\s*"[\d\D]+?"\s*)>/ui',
         function ($matches) use ($found_styles, $repeated_styles) {
             $element = $matches[1];
             $attributes = $matches[2];
             
-            $has_style = preg_match('/\bstyle\s*=\s*"([\D\d]+?)"/', $attributes, $match_attr);
+            $has_style = preg_match('/\bstyle\s*=\s*"([\D\d]+?)"/ui', $attributes, $match_attr);
             if (1 === $has_style && $found_styles[$match_attr[1]] > 1) {
-                $class_name = $repeated_styles[$match_attr[1]];
+                // Удаляем атрибут style
+                $attributes = preg_replace('/\bstyle\s*=\s*"([\D\d]+?)"/ui', '', $attributes);
 
-                
+                // Добавляем новый класс или создаем атрибут класс, вписывая в него новый стиль
+                $style_class_name = $repeated_styles[$match_attr[1]];
+                $class = '';
+                $has_class = preg_match('/\bclass\s*=\s*"([^"]+)"+?/ui', $attributes, $match_class);
+                if (1 == $has_class) {
+                    $other_classes = $match_class[1];
+                    $class = "class=\"$style_class_name $other_classes\"";
+                }
+                else {
+                    $class = "class=\"$style_class_name\"";
+                }
+                return "<$element $class>";
             }
 
-            return $matches[0];
+            return "<$element $attributes>";
         },
         $html
     );
 
-    return $found_styles;
+    return [$repeated_styles, $html];
 }

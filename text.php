@@ -25,24 +25,15 @@ elseif (isset($_POST['input'])) {
 $images = extract_images($text);
 $corrected_text = correct_reductions($text);
 list($tables, $tables_html) = tables_pointer($text);
-$styles = simplify_repeated_styles($text);
+list($styles, $styles_html) = simplify_repeated_styles($text);
 ?>
 
-<div class="mx-4">
+<div class="mx-4 pt-4">
     <form class="mb-3 d-flex flex-column align-items-center" method="POST">
         <label for="exampleFormControlTextarea1" class="form-label">Вставьте HTML код</label>
         <textarea class="form-control mb-3" id="exampleFormControlTextarea1" rows="20" name="input"><?= htmlspecialchars($text) ?></textarea>
         <button type="submit" class="btn btn-primary mb-3">Отправить</button>
     </form>
-
-    <?php if ($styles) : ?>
-        <div class="mb-3">
-            <h4>Стили (задание 20):</h4>
-            <?php foreach ($styles as $style => $count) : ?>
-                <?= htmlspecialchars($style) . " повторяется: " . $count ?>
-            <?php endforeach ?>
-        </div>
-    <?php endif ?>
 
     <?php if ($images) : ?>    
         <div class="mb-3">
@@ -74,7 +65,23 @@ $styles = simplify_repeated_styles($text);
         </div>
     <?php endif ?>
 
+    <?php if ($styles) : ?>
+        <div class="mb-3">
+            <h4>Стили (задание 20):</h4>
 
+            <?php
+                echo '<style type="text/css">';
+                foreach ($styles as $style => $class_name) {
+                    echo "$class_name {";
+                    echo $style;
+                    echo "}";
+                }
+                echo '</style>';
+            ?>
+
+            <?= $styles_html ?>
+        </div>
+    <?php endif ?>
 </div>
 
 <?php
