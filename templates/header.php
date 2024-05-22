@@ -91,4 +91,4 @@ UserActions::sign_out();
         </div>
     </header>
 
-    <main class="container-fluid gx-0" style="margin-top: 74px;">
+    <main class="container-fluid gx-0 pt-4" style="margin-top: 74px;">
