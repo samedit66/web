@@ -16,6 +16,9 @@ if (isset($_GET['preset'])) {
         case 3:
             $text = file_get_contents("resources/preset_3.html");
             break;
+        case 4:
+            $text = file_get_contents("resources/preset_4.html");
+            break;
     }
 }
 elseif (isset($_POST['input'])) {
