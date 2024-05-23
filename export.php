@@ -4,20 +4,20 @@ require_once($_SERVER['DOCUMENT_ROOT'] . '/web/templates/header.php');
 
 $exported = false;
 $error_text = '';
-$default_dir = '/web/files/';
+$default_dir = $_SERVER['DOCUMENT_ROOT'] . '/web/files/';
 $file_name = '';
 
 if ('POST' === $_SERVER['REQUEST_METHOD']
         && !empty($_POST['action'])
         && 'export' === $_POST['action']) {
-    $file_name = $_POST['file_name'] ?? 'products_exported.xml';
+    $file_name = $_POST['file_name'] ?: 'products_exported.xml';
     list($exported, $error_text) = export($default_dir, $file_name);
 }
 
 function export(string $dir, string $file_name): array {
     $file_name = htmlspecialchars($file_name);
     if (!preg_match('/^\w+\.xml$/u', $file_name)) {
-        return [false, "Некорректное имя файла!"];
+        return [false, "Некорректное имя файла"];
     }
 
     $stmt = Database::get_instance()->prepare('SELECT * FROM products');
@@ -28,13 +28,15 @@ function export(string $dir, string $file_name): array {
     $xml = new SimpleXMLElement($xmlstr);
     foreach ($products as $product) {
         $product_xml = $xml->addChild('product');
+        $product_xml->addChild('id', $product['id']);
+        $product_xml->addChild('id_discount', $product['id_discount']);
         $product_xml->addChild('name', $product['name']);
         $product_xml->addChild('description', $product['description']);
         $product_xml->addChild('img_path', $product['img_path']);
         $product_xml->addChild('cost', $product['cost']);
     }
     
-    $xml->asXml($_SERVER['DOCUMENT_ROOT'] .  $dir . $file_name);
+    $xml->asXml($dir . $file_name);
     
     return [true, ''];
 }
@@ -60,7 +62,7 @@ function export(string $dir, string $file_name): array {
             class="form-control mb-2"
             id="file_name"
             value="<?= $file_name ?>"
-            placeholder="/web/upload/products_exported.xml"
+            placeholder="products_exported.xml"
             />
         <input class="form-control" type="hidden" name='action' value="export" />
         <button type="submit" class="btn btn-primary mb-2">Сохранить</button>
