@@ -7,7 +7,7 @@ class UserActions
             return [];
         }
 
-        if ('signup' != $_POST['action']) {
+        if (!empty($_POST['action']) && 'signup' != $_POST['action']) {
             return [];
         }
 
@@ -29,7 +29,7 @@ class UserActions
             return [];
         }
 
-        if ('signin' != $_POST['action']) {
+        if (!empty($_POST['action']) && 'signin' != $_POST['action']) {
             return [];
         }
 
@@ -47,7 +47,7 @@ class UserActions
             return "";
         }
 
-        if ('signout' != $_POST['action']) {
+        if (!empty($_POST['action']) && 'signout' != $_POST['action']) {
             return "";
         }
 
