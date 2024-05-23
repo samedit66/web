@@ -10,16 +10,19 @@ $file_name = '';
 if ('POST' === $_SERVER['REQUEST_METHOD']
         && !empty($_POST['action'])
         && 'export' === $_POST['action']) {
-    $file_name = $_POST['file_name'] ?: 'products_exported.xml';
-    list($exported, $error_text) = export($default_dir, $file_name);
+    if (!is_dir($default_dir) && !mkdir($default_dir, 0777, true)) {
+        $error_text = 'Не удалось создать директорию для загрузки файлов.';
+    }
+    else {
+        $file_name = htmlspecialchars(empty($_POST['file_name']) ? 'products_exported.xml' : $_POST['file_name']);
+        list($exported, $error_text) = export($default_dir, $file_name);
+    }
 }
 
 function export(string $dir, string $file_name): array {
-    $file_name = htmlspecialchars($file_name);
     if (!preg_match('/^\w+\.xml$/u', $file_name)) {
         return [false, "Некорректное имя файла"];
     }
-
     $stmt = Database::get_instance()->prepare('SELECT * FROM products');
     $stmt->execute();
     $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -44,9 +47,10 @@ function export(string $dir, string $file_name): array {
 
 <div class="m-5">
     <?php if ($exported) : ?>
+        <?php $file_path = $default_dir . $file_name; ?>
         <div class="alert alert-success mb-3" role="alert">
             Файл с данными сохранен на диск по адресу: 
-            <a href="./files/products_exported.xml"> <?= $default_dir . $file_name ?></a>
+            <a href=<?= $file_path ?>> <?= $file_path ?></a>
         </div>
     <?php elseif (!empty($error_text)) : ?>
         <div class="alert alert-danger mb-3" role="alert">
