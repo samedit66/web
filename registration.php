@@ -20,7 +20,7 @@ require_once($_SERVER['DOCUMENT_ROOT'] . '/web/templates/header.php');
     <div class="px-4 py-5 my-5 text-center">
         <form method="post">
             <h1 class="display-5">
-                <?= "Вы уже авторизованы как " . UserLogic::current()['email'] . "." ?>
+                <?= "Вы уже авторизованы как " . htmlspecialchars(UserLogic::current()['email']) . "." ?>
             </h1>
             <input class="form-control" type="hidden" name='action' value="signout" />
             <button class="btn btn-outline-secondary" type="submit">Выйти</button>
