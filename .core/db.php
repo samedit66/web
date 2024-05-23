@@ -23,7 +23,7 @@ class Database {
     public function __wakeup() {
     }
 
-    public static function getInstance(): Database {
+    public static function get_instance(): Database {
         if (null === self::$instance) {
             self::$instance = new static();
         }
@@ -32,14 +32,14 @@ class Database {
     }
 
     public static function connection(): \PDO {
-        return static::getInstance()->connection;
+        return static::get_instance()->connection;
     }
 
     public static function prepare($statement): \PDOStatement {
         return static::connection()->prepare($statement);
     }
 
-    public static function lastInsertId(): int {
+    public static function last_insert_id(): int {
         return intval(static::connection()->lastInsertId());
     }
 }

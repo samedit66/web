@@ -35,7 +35,7 @@ class UserTable
 
         $users = $query->fetchAll();
 
-        if(!count($users)) {
+        if (!count($users)) {
             return null;
         }
 
