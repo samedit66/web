@@ -36,9 +36,9 @@ function import(string $dir, string $file_name) : array {
         return [false, 0, "Требуется XML файл"];
     }
 
-    list($raw_data, $records_count) = read_xml_file($file_path);
+    $records_count = 0;
     try {
-        import_data_to_db($raw_data);
+        $records_count = import_data_to_db($file_path);
     }
     catch (InvalidArgumentException $exp) {
         return [false, 0, $exp->getMessage()];
@@ -47,27 +47,7 @@ function import(string $dir, string $file_name) : array {
     return [true, $records_count, ''];
 }
 
-function read_xml_file(string $file_path): array
-{
-    $data = [];
-
-    // Загружаем XML файл
-    $xml = simplexml_load_file($file_path);
-
-    // Перебираем каждый элемент в XML файле
-    foreach ($xml->children() as $row) {
-        // Преобразуем каждый элемент в ассоциативный массив
-        $item = [];
-        foreach ($row->children() as $key => $value) {
-            $item[$key] = (string) $value;
-        }
-        $data[] = $item;
-    }
-
-    return [$data, count($data)];
-}
-
-function import_data_to_db(array $raw_data)
+function import_data_to_db(string $file_path)
 {
     $allowed_keys = [
         'id',
@@ -77,16 +57,6 @@ function import_data_to_db(array $raw_data)
         'img_path',
         'cost'
     ];
-
-    $keys = array_keys($raw_data[0]);
-    if (count($keys) !== count($allowed_keys)) {
-        throw new InvalidArgumentException("Недостаточно столбцов в файле с данными!");
-    }
-    foreach ($keys as $key) {
-        if (!in_array($key, $allowed_keys)) {
-            throw new InvalidArgumentException("Столбцов в файле с данными слишком много!");
-        }
-    }
 
     // Создаем таблицу в БД, если ее еще не было
     $stmt = Database::prepare('CREATE TABLE IF NOT EXISTS `products_imported` (
@@ -103,28 +73,44 @@ function import_data_to_db(array $raw_data)
     $stmt = Database::prepare('TRUNCATE products_imported');
     $stmt->execute();
 
+    // Загружаем XML файл
+    $xml = simplexml_load_file($file_path);
+
+    $records_count = 0;
     // Загружаем данные из файла в таблицу в БД
-    foreach ($raw_data as $record) {
+    foreach ($xml->children() as $row) {
         $stmt = Database::prepare(
             "INSERT INTO `products_imported` (`id`, `img_path`, `name`, `id_discount`, `description`, `cost`) VALUES (:id, :img_path, :name, :id_discount, :description, :cost)"
         );
 
-        foreach ($record as $paramName => $paramValue) {
-            if (is_numeric($paramValue)) {
-                $stmt->bindValue($paramName, $paramValue, PDO::PARAM_INT);
-            } else {
-                $stmt->bindValue($paramName, $paramValue, PDO::PARAM_STR);
+        foreach ($row->children() as $key => $value) {
+            if (!in_array($key, $allowed_keys)) {
+                Database::prepare('TRUNCATE products_imported')->execute();
+                throw new InvalidArgumentException("Неизвестный столбец данных");
             }
+
+            $key = (string) $key;
+            $value = (string) $value;
+
+            if (is_numeric($value)) {
+                $stmt->bindValue(":$key", $value, PDO::PARAM_INT);
+            }
+            else {
+                $stmt->bindValue(":$key", $value, PDO::PARAM_STR);
+            }         
         }
 
         $stmt->execute();
+        $records_count++;
     }
+
+    return $records_count;
 }
 ?>
 
 <div class="m-5 pt-4">
     <?php if ($imported) : ?>
-        <?php $file_path = $default_dir . $file_name; ?>
+        <?php $file_path = '/web/files/' . $file_name; ?>
         <div class="alert alert-success mb-3" role="alert">
             Файл с данными получен из <a href=<?= $file_path ?>> <?= $file_path ?></a> и обработан.
             Создана таблица <?= $table_name ?>, кол-во записей в таблице: <?= $records_count ?>.

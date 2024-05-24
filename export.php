@@ -25,11 +25,10 @@ function export(string $dir, string $file_name): array {
     }
     $stmt = Database::get_instance()->prepare('SELECT * FROM products');
     $stmt->execute();
-    $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     $xmlstr = '<?xml version="1.0" encoding="UTF-8"?><products></products>';
     $xml = new SimpleXMLElement($xmlstr);
-    foreach ($products as $product) {
+    while ($product = $stmt->fetch()) {
         $product_xml = $xml->addChild('product');
         $product_xml->addChild('id', $product['id']);
         $product_xml->addChild('id_discount', $product['id_discount']);
@@ -47,7 +46,7 @@ function export(string $dir, string $file_name): array {
 
 <div class="m-5 pt-4">
     <?php if ($exported) : ?>
-        <?php $file_path = $default_dir . $file_name; ?>
+        <?php $file_path = '/web/files/' . $file_name; ?>
         <div class="alert alert-success mb-3" role="alert">
             Файл с данными сохранен на диск по адресу: 
             <a href=<?= $file_path ?>> <?= $file_path ?></a>
