@@ -122,7 +122,7 @@ function import_data_to_db(array $raw_data)
 }
 ?>
 
-<div class="m-5">
+<div class="m-5 pt-4">
     <?php if ($imported) : ?>
         <?php $file_path = $default_dir . $file_name; ?>
         <div class="alert alert-success mb-3" role="alert">

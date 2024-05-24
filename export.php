@@ -45,7 +45,7 @@ function export(string $dir, string $file_name): array {
 }
 ?>
 
-<div class="m-5">
+<div class="m-5 pt-4">
     <?php if ($exported) : ?>
         <?php $file_path = $default_dir . $file_name; ?>
         <div class="alert alert-success mb-3" role="alert">
