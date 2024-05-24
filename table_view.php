@@ -2,10 +2,20 @@
 require_once($_SERVER['DOCUMENT_ROOT'] . '/web/.core/index.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . '/web/templates/header.php');
 
+$query = "SELECT products.id, products.name, discounts.discount_size, products.description, products.cost, products.img_path
+          AS id, name, discount_size, description, cost, img_path
+          FROM products
+          INNER JOIN discounts ON products.id_discount = discounts.id";
+$stmt = Database::prepare($query)
+$stmt->execute();
+
 $products = [];
+while ($row = $stmt->fetch()) {
+    $products[] = $row;
+}
 ?>
 
-<table class="table table-bordered mb-3">
+<table class="table table-bordered mb-3 mt-5">
     <thead>
         <tr>
             <th scope="col">ID</th>
