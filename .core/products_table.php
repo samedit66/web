@@ -16,6 +16,12 @@ class ProductsTable
         }
     }
 
+    public static function delete(string $id) {
+        $query = Database::prepare("DELETE FROM products WHERE id = :id");
+        $query->bindValue(":id", $id);
+        $query->execute();
+    }
+
     public static function get_all() : array {
         $query = Database::prepare('SELECT * FROM `products`');
         $query->execute();

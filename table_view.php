@@ -2,13 +2,20 @@
 require_once($_SERVER['DOCUMENT_ROOT'] . '/web/.core/index.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . '/web/templates/header.php');
 
-$query = "SELECT products.id, products.name, discounts.discount_size, products.description, products.cost, products.img_path
-          AS id, name, discount_size, description, cost, img_path
+if ('POST' === $_SERVER['REQUEST_METHOD']
+        && isset($_POST['action'])
+        && $_POST['action'] === 'delete') {
+    ProductsTable::delete($_POST["id"]);
+}
+else {
+    echo "SSSSSS";
+}
+
+$query = "SELECT products.id AS id, products.name AS name, discounts.discount_size AS discount_size, products.description AS descr, products.cost AS cost, products.img_path AS img_path
           FROM products
           INNER JOIN discounts ON products.id_discount = discounts.id";
-$stmt = Database::prepare($query)
+$stmt = Database::prepare($query);
 $stmt->execute();
-
 $products = [];
 while ($row = $stmt->fetch()) {
     $products[] = $row;
@@ -20,8 +27,8 @@ while ($row = $stmt->fetch()) {
         <tr>
             <th scope="col">ID</th>
             <th scope="col">Название</th>
-            <th scope="col">Описание</th>
             <th scope="col">Доступная скидка (%)</th>
+            <th scope="col">Описание</th>
             <th scope="col">Стоимость</th>
             <th scope="col">Изображение</th>
             <th scope="col">Действие</th>
@@ -30,21 +37,32 @@ while ($row = $stmt->fetch()) {
     <tbody>
         <?php foreach ($products as $item) : ?>
             <tr>
-                <th scope="row"><img src="db_images/<?=$item['img_path']?>" style="max-width: 150px;"></th>
+                <td> <?=$item['id']?> </td>
                 <td> <?=$item['name']?> </td>
-                <td> <?=$item['discount']?> </td>
-                <td> <?=$item['description']?> </td>
+                <td> <?=$item['discount_size']?> </td>
+                <td> <?=$item['descr']?> </td>
                 <td> <?=$item['cost']?> </td>
+                <td><img src="db_images/<?=$item['img_path']?>" style="max-width: 150px;"></td>
                 <td class="d-flex justify-content-around">
-                    <button type="button" class="btn btn-primary">Редактировать</button>
-                    <button type="button" class="btn btn-danger">Удалить</button>
+                    <form method="POST">
+                        <input class="form-control" type="hidden" name='action' value="edit" />
+                        <button type="submit" class="btn btn-primary">Редактировать</button>
+                    </form>
+                    <form method="POST">
+                        <input class="form-control" type="hidden" name="id" value="<?=$item['id']?>" />
+                        <input class="form-control" type="hidden" name="action" value="delete" />
+                        <button type="submit" class="btn btn-danger">Удалить</button>
+                    </form>
                 </td>
             </tr>
         <?php endforeach ?>
   </tbody>
 </table>
 
-<button type="button" class="btn btn-primary">Добавить</button>
+<form method="POST">
+    <input class="form-control" type="hidden" name="action" value="add" />
+    <button type="submit" class="btn btn-primary">Добавить</button>
+</form>
 
 <?php
     require_once('templates/footer.php');
